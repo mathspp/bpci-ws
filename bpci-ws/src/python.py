@@ -89,17 +89,20 @@ class Parser:
         return self.eat(TokenType.INT)
 
     def parse_computation(self):
-        left = self.parse_number()
+        result = self.parse_number()
 
-        if self.peek() == TokenType.PLUS:
-            self.eat(TokenType.PLUS)
-            op = "+"
-        else:
-            self.eat(TokenType.MINUS)
-            op = "-"
+        while self.peek() in {TokenType.PLUS, TokenType.MINUS}:
+            if self.peek() == TokenType.PLUS:
+                self.eat(TokenType.PLUS)
+                op = "+"
+            else:
+                self.eat(TokenType.MINUS)
+                op = "-"
+            right = self.parse_number()
 
-        right = self.parse_number()
-        return BinOp(op, left, right)
+            result = BinOp(op, result, right)
+
+        return result
 
     def peek(self):
         if self.ptr < len(self.tokens):
@@ -121,5 +124,5 @@ class Parser:
 
 
 if __name__ == "__main__":
-    tokens = Tokenizer("3 - 5").all_tokens()
+    tokens = Tokenizer("3 - 5 + 2").all_tokens()
     print(Parser(tokens).parse())
