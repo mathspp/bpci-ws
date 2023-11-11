@@ -148,7 +148,9 @@ class Compiler:
         yield from compile_method(tree)
 
     def compile_BinOp(self, binop):
-        ...
+        yield from self._compile(binop.left)
+        yield from self._compile(binop.right)
+        yield Bytecode(BytecodeType.BINOP, binop.op)
 
     def compile_Int(self, int):
         yield Bytecode(BytecodeType.PUSH, int.value)
