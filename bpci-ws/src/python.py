@@ -93,11 +93,13 @@ class Parser:
 
         if self.peek() == TokenType.PLUS:
             self.eat(TokenType.PLUS)
+            op = "+"
         else:
             self.eat(TokenType.MINUS)
+            op = "-"
 
         right = self.parse_number()
-        return BinOp("+", left, right)
+        return BinOp(op, left, right)
 
     def peek(self):
         if self.ptr < len(self.tokens):
@@ -119,5 +121,5 @@ class Parser:
 
 
 if __name__ == "__main__":
-    tokens = Tokenizer("3 + 5").all_tokens()
+    tokens = Tokenizer("3 - 5").all_tokens()
     print(Parser(tokens).parse())
