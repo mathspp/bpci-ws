@@ -77,7 +77,7 @@ class Parser:
     """
     program := computation EOF
 
-    computation := number (PLUS | MINUS) number
+    computation := number ( (PLUS | MINUS) number )*
     number := INT
     """
 
