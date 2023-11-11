@@ -32,9 +32,15 @@ class Tokenizer:
         self.ptr = 0
 
     def next_token(self):
-        if self.ptr >= len(self.code):
-            return Token(TokenType.EOF)  # end of file
+        # ignore spaces
+        while self.ptr < len(self.code) and self.code[self.ptr] == " ":
+            self.ptr += 1
 
+        # check for end of file
+        if self.ptr >= len(self.code):
+            return Token(TokenType.EOF)
+
+        # create a token
         char = self.code[self.ptr]
         self.ptr += 1
 
