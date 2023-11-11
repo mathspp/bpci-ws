@@ -85,6 +85,15 @@ class Parser:
         self.tokens = tokens
         self.ptr = 0
 
+    def parse_number(self):
+        return self.eat(TokenType.INT)
+
+    def parse_computation(self):
+        left = self.parse_number()
+        self.eat(TokenType.PLUS)
+        right = self.parse_number()
+        return BinOp("+", left, right)
+
     def parse(self):
         comp = self.parse_computation()
         self.eat(TokenType.EOF)
