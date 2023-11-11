@@ -86,7 +86,8 @@ class Parser:
         self.ptr = 0
 
     def parse_number(self):
-        return self.eat(TokenType.INT)
+        integer_token = self.eat(TokenType.INT)
+        return Int(integer_token.value)
 
     def parse_computation(self):
         result = self.parse_number()
@@ -139,7 +140,7 @@ class Compiler:
         self.tree = tree
 
     def compile(self):
-        self._compile(self.tree)
+        yield from self._compile(self.tree)
 
     def _compile(self, tree):
         node_type = tree.__class__.__name__
@@ -156,6 +157,26 @@ class Compiler:
         yield Bytecode(BytecodeType.PUSH, int.value)
 
 
+class Interpreter:
+    def __init__(self, bytecodes):
+        self.bytecodes = bytecodes
+        self.stack = []
+
+    def interpret(self):
+        for bc in self.bytecodes:
+            self._run(bc)
+        print(self.stack)
+
+    def _run(self, bc):
+        bc_value = bc.type.value
+        interpret_method_name = f"interpret_{bc_value}"
+        interpret_method = getattr(self, interpret_method_name)
+        interpret_method(bc)
+
+
 if __name__ == "__main__":
     tokens = Tokenizer("3 - 5 + 2").all_tokens()
-    print(Parser(tokens).parse())
+    tree = Parser(tokens).parse()
+    print(tree)
+    for bc in Compiler(tree).compile():
+        print(bc)
