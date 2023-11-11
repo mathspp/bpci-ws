@@ -171,6 +171,15 @@ class Interpreter:
         # bc is a bytecode PUSH
         self.stack.append(bc.value)
 
+    def interpret_BINOP(self, bc):
+        right = self.stack.pop()
+        left = self.stack.pop()
+        op = bc.value
+        if op == "+":
+            self.stack.append(left + right)
+        elif op == "-":
+            self.stack.append(left - right)
+
     def _run(self, bc):
         bc_value = bc.type.value
         interpret_method_name = f"interpret_{bc_value}"
