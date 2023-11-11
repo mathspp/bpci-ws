@@ -77,7 +77,7 @@ class Parser:
     """
     program := computation EOF
 
-    computation := number PLUS number
+    computation := number (PLUS | MINUS) number
     number := INT
     """
 
@@ -90,9 +90,20 @@ class Parser:
 
     def parse_computation(self):
         left = self.parse_number()
-        self.eat(TokenType.PLUS)
+
+        if self.peek() == TokenType.PLUS:
+            self.eat(TokenType.PLUS)
+        else:
+            self.eat(TokenType.MINUS)
+
         right = self.parse_number()
         return BinOp("+", left, right)
+
+    def peek(self):
+        if self.ptr < len(self.tokens):
+            return self.tokens[self.ptr].type
+        else:
+            return None
 
     def parse(self):
         comp = self.parse_computation()
@@ -108,5 +119,5 @@ class Parser:
 
 
 if __name__ == "__main__":
-    tok = Tokenizer("3 + + + + + 5")
-    print(tok.all_tokens())
+    tokens = Tokenizer("3 + 5").all_tokens()
+    print(Parser(tokens).parse())
