@@ -49,10 +49,18 @@ class Tokenizer:
         elif token := CHARS_AS_TOKENS.get(char):
             return token
 
+    def all_tokens(self):
+        tokens = []
+        while (tok := self.next_token()).type != TokenType.EOF:
+            tokens.append(tok)
+        tokens.append(tok)
+        return tokens
+
+
+class Parser:
+    ...
+
 
 if __name__ == "__main__":
-    tok = Tokenizer("3 + 5")
-    print(tok.next_token())
-    print(tok.next_token())
-    print(tok.next_token())
-    print(tok.next_token())
+    tok = Tokenizer("3 + + + + + 5")
+    print(tok.all_tokens())
