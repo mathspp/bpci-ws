@@ -188,8 +188,7 @@ class Interpreter:
 
 
 if __name__ == "__main__":
-    tokens = Tokenizer("3 - 5 + 2").all_tokens()
+    tokens = Tokenizer("3 - 5 + 2 - 9").all_tokens()
     tree = Parser(tokens).parse()
-    print(tree)
-    for bc in Compiler(tree).compile():
-        print(bc)
+    bytecode = list(Compiler(tree).compile())
+    Interpreter(bytecode).interpret()
