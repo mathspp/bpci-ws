@@ -62,12 +62,12 @@ class TreeNode:
 
 
 @dataclass
-class Int:
+class Int(TreeNode):
     value: int
 
 
 @dataclass
-class BinOp:
+class BinOp(TreeNode):
     op: str
     left: Int
     right: Int
@@ -146,6 +146,9 @@ class Compiler:
         compile_method_name = f"compile_{node_type}"
         compile_method = getattr(self, compile_method_name)
         yield from compile_method(tree)
+
+    def compile_BinOp(self, binop):
+        ...
 
     def compile_Int(self, int):
         yield Bytecode(BytecodeType.PUSH, int.value)
