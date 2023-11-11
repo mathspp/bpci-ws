@@ -94,6 +94,7 @@ class Parser:
         token = self.tokens[self.ptr]
         if token.type != expected_token_type:
             raise RuntimeError("1 / 0")
+        self.ptr += 1
         return token
 
 
