@@ -167,6 +167,10 @@ class Interpreter:
             self._run(bc)
         print(self.stack)
 
+    def interpret_PUSH(self, bc):
+        # bc is a bytecode PUSH
+        self.stack.append(bc.value)
+
     def _run(self, bc):
         bc_value = bc.type.value
         interpret_method_name = f"interpret_{bc_value}"
