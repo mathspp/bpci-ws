@@ -57,8 +57,44 @@ class Tokenizer:
         return tokens
 
 
+class TreeNode:
+    pass
+
+
+@dataclass
+class Int:
+    value: int
+
+
+@dataclass
+class BinOp:
+    op: str
+    left: Int
+    right: Int
+
+
 class Parser:
-    ...
+    """
+    program := computation EOF
+
+    computation := number PLUS number
+    number := INT
+    """
+
+    def __init__(self, tokens):
+        self.tokens = tokens
+        self.ptr = 0
+
+    def parse(self):
+        comp = self.parse_computation()
+        self.eat(TokenType.EOF)
+        return comp
+
+    def eat(self, expected_token_type):
+        token = self.tokens[self.ptr]
+        if token.type != expected_token_type:
+            raise RuntimeError("1 / 0")
+        return token
 
 
 if __name__ == "__main__":
