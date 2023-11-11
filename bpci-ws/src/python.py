@@ -123,6 +123,34 @@ class Parser:
         return token
 
 
+class BytecodeType(Enum):
+    PUSH = "PUSH"
+    BINOP = "BINOP"
+
+
+@dataclass
+class Bytecode:
+    type: BytecodeType
+    value: Any
+
+
+class Compiler:
+    def __init__(self, tree):
+        self.tree = tree
+
+    def compile(self):
+        self._compile(self.tree)
+
+    def _compile(self, tree):
+        node_type = tree.__class__.__name__
+        compile_method_name = f"compile_{node_type}"
+        compile_method = getattr(self, compile_method_name)
+        yield from compile_method(tree)
+
+    def compile_Int(self, int):
+        yield Bytecode(BytecodeType.PUSH, int.value)
+
+
 if __name__ == "__main__":
     tokens = Tokenizer("3 - 5 + 2").all_tokens()
     print(Parser(tokens).parse())
